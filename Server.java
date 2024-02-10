@@ -45,8 +45,9 @@ public class Server {
         Runnable r1=()->{
             //iske under jo bhi code likhoge vo thread execute krega
             //since continously read krna hai toh while true mai ddal diya
-            while (true){
-                try{
+            try{
+                while (true){
+
                     String message=reader.readLine();
                     if(message.equals("exit")){
                         System.out.println("Client exited the chat");
@@ -55,9 +56,15 @@ public class Server {
                         break;
                     }
                     System.out.println("Client :"+message);
+
+
                 }
-                catch (Exception e){e.printStackTrace();}
             }
+            catch (Exception e){
+//                e.printStackTrace();
+                System.out.println("connection is closed");
+            }
+
         };
 
         new Thread(r1).start();
@@ -65,8 +72,9 @@ public class Server {
 
     public void startWriting(){
         Runnable r2=()->{
-            while (true){
-                try{
+            try {
+                while (true && !socket.isClosed()){
+
                     //to read from keyboard
                     BufferedReader br1=new BufferedReader(new InputStreamReader(System.in));
 
@@ -75,10 +83,16 @@ public class Server {
 
                     writer.println(messageFromKeyboard);
                     writer.flush();
-                }
-                catch (Exception e){e.printStackTrace();}
-            }
 
+                    if(messageFromKeyboard.equals("exit")){socket.close();break; }
+
+
+                }
+            }
+            catch (Exception e){
+//                e.printStackTrace();
+                System.out.println("connection is closed");
+            }
         };
 
         new Thread(r2).start();

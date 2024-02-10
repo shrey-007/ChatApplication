@@ -34,17 +34,23 @@ public class Client {
         Runnable r1=()->{
             //iske under jo bhi code likhoge vo thread execute krega
             //since continously read krna hai toh while true mai ddal diya
-            while (true){
-                try{
-                    String message=reader.readLine();
-                    if(message.equals("exit")){
-                        System.out.println("Server exited the chat");
-                        break;
+
+                try {
+                    while (true) {
+                        String message = reader.readLine();
+                        if (message.equals("exit")) {
+                            System.out.println("Server exited the chat");
+                            socket.close();
+                            break;
+                        }
+                        System.out.println("Server :" + message);
                     }
-                    System.out.println("Server :"+message);
                 }
-                catch (Exception e){e.printStackTrace();}
-            }
+                catch (Exception e){
+//                    e.printStackTrace();
+                    System.out.println("connection closed");
+                }
+
         };
 
         new Thread(r1).start();
@@ -52,8 +58,9 @@ public class Client {
 
     public void startWriting(){
         Runnable r2=()->{
-            while (true){
+
                 try{
+                    while (true && !socket.isClosed()){
                     //to read from keyboard
                     BufferedReader br1=new BufferedReader(new InputStreamReader(System.in));
 
@@ -62,9 +69,17 @@ public class Client {
 
                     writer.println(messageFromKeyboard);
                     writer.flush();
+
+                    if(messageFromKeyboard.equals("exit")){socket.close();break;}
+                   }
+
                 }
-                catch (Exception e){e.printStackTrace();}
-            }
+
+                catch (Exception e){
+//                    e.printStackTrace();
+                    System.out.println("connection closed");
+                }
+
 
         };
 
