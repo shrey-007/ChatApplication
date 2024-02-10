@@ -36,7 +36,7 @@ public class Client extends JFrame{
               createGUI();
               handleEvents();
               startReading();
-            startWriting();
+//            startWriting();
 
         }
         catch (Exception e){
