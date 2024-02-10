@@ -50,6 +50,8 @@ public class Server {
                     String message=reader.readLine();
                     if(message.equals("exit")){
                         System.out.println("Client exited the chat");
+                        //close the connection
+                        socket.close();
                         break;
                     }
                     System.out.println("Client :"+message);
