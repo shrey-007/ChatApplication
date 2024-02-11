@@ -1,10 +1,10 @@
+import entity.Identity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -17,14 +17,14 @@ public class Client extends JFrame{
 
 
     //declare components
-    private JLabel heading=new JLabel("Shrey");
+    private JLabel heading=new JLabel("ShreyNet");
     private JTextArea messageArea=new JTextArea();
     private JTextField messageInput=new JTextField();
 
     private Font font=new Font("Roboto",Font.PLAIN,20);
 
 
-    public Client(String IpAddressOfServer,int portNumberOfServer){
+    public Client(String IpAddressOfServer,int portNumberOfServer,Identity myidentity){
         try{
 //            sending request to server's 7777 port
             this.socket=new Socket(IpAddressOfServer,portNumberOfServer);
@@ -33,10 +33,18 @@ public class Client extends JFrame{
             reader=new BufferedReader(new InputStreamReader(socket.getInputStream())); //this is ins
 
             writer=new PrintWriter(socket.getOutputStream());  //this is outs
+
+            //send my identity
+            ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(myidentity);
+
+            //get the server identity
+            ObjectInputStream objectInputStream=new ObjectInputStream(socket.getInputStream());
+            Identity serverIdentity=(Identity) objectInputStream.readObject();
 //
               createGUI();
               handleEvents();
-              startReading();
+              startReading(serverIdentity.getName());
 //            startWriting();
 
         }
@@ -82,7 +90,7 @@ public class Client extends JFrame{
 
     }
 
-    public void startReading(){
+    public void startReading(String serverName){
         Runnable r1=()->{
             //iske under jo bhi code likhoge vo thread execute krega
             //since continously read krna hai toh while true mai ddal diya
@@ -98,7 +106,7 @@ public class Client extends JFrame{
                             break;
                         }
 //                        System.out.println("Server :" + message);
-                        messageArea.append("Server: "+message+"\n");
+                        messageArea.append(serverName+": "+message+"\n");
                     }
                 }
                 catch (Exception e){
@@ -172,12 +180,18 @@ public class Client extends JFrame{
     public static void main(String[] args) {
 
         Scanner sc=new Scanner(System.in);
+        System.out.println("What is your name?");
+        String myName=sc.next();
+        Identity myidentity=new Identity(myName);
+
         System.out.println("Enter IP address of server");
         String IpAddressOfServer=sc.next();
+
         System.out.println("Enter port number of server");
         int portNumberOfServer=sc.nextInt();
 
-        new Client(IpAddressOfServer,portNumberOfServer);
+        //send your identity and port number,ip of server
+        new Client(IpAddressOfServer,portNumberOfServer,myidentity);
 
     }
 }

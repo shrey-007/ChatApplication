@@ -1,3 +1,5 @@
+import entity.Identity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -16,7 +18,7 @@ public class Server extends JFrame {
     PrintWriter writer;
 
     //declare components
-    private JLabel heading=new JLabel("Disha Patani");
+    private JLabel heading=new JLabel("ShreyNet");
     private JTextArea messageArea=new JTextArea();
     private JTextField messageInput=new JTextField();
 
@@ -26,7 +28,7 @@ public class Server extends JFrame {
 
 
     //Constructor
-    public Server(int portNumber){
+    public Server(int portNumber,Identity myIdentity){
         try {
             //server se baat krne ke liye 7777 hi use krna padega ab.Toh client agar request bheje toh 7777 pr bheje
             this.serverSocket=new ServerSocket(portNumber);
@@ -44,9 +46,18 @@ public class Server extends JFrame {
             //jaa streams are unidirectional means ki ek hi stream se i/o nhi hota alag se input and output stream bananai pdti hai
             writer=new PrintWriter(socket.getOutputStream());  //this is outc
 
+            //get the name of the client
+            ObjectInputStream objectInputStream=new ObjectInputStream(socket.getInputStream());
+            Identity clientIdentity=(Identity) objectInputStream.readObject();
+
+            //send your name to client
+            ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(myIdentity);
+
+
             createGUI();
             handleEvents();
-            startReading();
+            startReading(clientIdentity.getName());
         }
         catch (Exception e){e.printStackTrace();}
     }
@@ -91,7 +102,7 @@ public class Server extends JFrame {
     //startReading se hume continously read krna hai and startWriting se hume continuosly write krna hai means dono kaam
     // saath mai krne hai toh , we have to use multithreading
 
-    public void startReading(){
+    public void startReading(String serverName){
         Runnable r1=()->{
             //iske under jo bhi code likhoge vo thread execute krega
             //since continously read krna hai toh while true mai ddal diya
@@ -108,7 +119,7 @@ public class Server extends JFrame {
                         break;
                     }
 //                    System.out.println("Client :"+message);
-                    messageArea.append("Server: "+message+"\n");
+                    messageArea.append(serverName+": "+message+"\n");
 
 
                 }
@@ -183,12 +194,18 @@ public class Server extends JFrame {
 
 
     public static void main(String[] args) {
+
         Scanner sc=new Scanner(System.in);
+        System.out.println("What is your name?");
+        String myName=sc.next();
+        Identity myidentity=new Identity(myName);
+
         System.out.println("Enter port Number");
         int portNumber=sc.nextInt();
 
+        //send you identity and port number
         System.out.println("Server is starting.....");
-        new Server(portNumber);
+        new Server(portNumber,myidentity);
     }
 
 }
