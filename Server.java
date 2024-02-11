@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Server extends JFrame {
     ServerSocket serverSocket;
@@ -25,10 +26,10 @@ public class Server extends JFrame {
 
 
     //Constructor
-    public Server(){
+    public Server(int portNumber){
         try {
             //server se baat krne ke liye 7777 hi use krna padega ab.Toh client agar request bheje toh 7777 pr bheje
-            this.serverSocket=new ServerSocket(7777);
+            this.serverSocket=new ServerSocket(portNumber);
             System.out.println("Waiting for client");
 
             //ab jaise hi client request bhejega toh ye accept method usko accept krega and us client ka socket ka r
@@ -182,8 +183,12 @@ public class Server extends JFrame {
 
 
     public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter port Number");
+        int portNumber=sc.nextInt();
+
         System.out.println("Server is starting.....");
-        new Server();
+        new Server(portNumber);
     }
 
 }

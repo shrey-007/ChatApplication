@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client extends JFrame{
 
@@ -23,10 +24,10 @@ public class Client extends JFrame{
     private Font font=new Font("Roboto",Font.PLAIN,20);
 
 
-    public Client(){
+    public Client(String IpAddressOfServer,int portNumberOfServer){
         try{
 //            sending request to server's 7777 port
-            this.socket=new Socket("127.0.0.1",7777);
+            this.socket=new Socket(IpAddressOfServer,portNumberOfServer);
 
 
             reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -169,7 +170,14 @@ public class Client extends JFrame{
         new Thread(r2).start();
     }
     public static void main(String[] args) {
-        new Client();
+
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter IP address of server");
+        String IpAddressOfServer=sc.next();
+        System.out.println("Enter port number of server");
+        int portNumberOfServer=sc.nextInt();
+
+        new Client(IpAddressOfServer,portNumberOfServer);
 
     }
 }
