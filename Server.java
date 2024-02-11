@@ -39,10 +39,10 @@ public class Server extends JFrame {
 
             //socket se input stream nikaali, and use inputStreamReader ko de diya, toh jo bytes mai data aaega usko
             //inputStreamReader character mai change kr dega,fir uska buffer banega
-            reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            reader=new BufferedReader(new InputStreamReader(socket.getInputStream())); //this is inc
 
             //jaa streams are unidirectional means ki ek hi stream se i/o nhi hota alag se input and output stream bananai pdti hai
-            writer=new PrintWriter(socket.getOutputStream());
+            writer=new PrintWriter(socket.getOutputStream());  //this is outc
 
             createGUI();
             handleEvents();
@@ -130,7 +130,7 @@ public class Server extends JFrame {
                 while (true && !socket.isClosed()){
 
                     //to read from keyboard
-                    BufferedReader br1=new BufferedReader(new InputStreamReader(System.in));
+                    BufferedReader br1=new BufferedReader(new InputStreamReader(System.in));  //this is inputs
 
                     //toh server ke keyboard se jo bhi enter hoga vo yaha aaega.
                     String messageFromKeyboard=br1.readLine();

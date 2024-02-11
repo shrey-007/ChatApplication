@@ -30,9 +30,9 @@ public class Client extends JFrame{
             this.socket=new Socket(IpAddressOfServer,portNumberOfServer);
 
 
-            reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            reader=new BufferedReader(new InputStreamReader(socket.getInputStream())); //this is ins
 
-            writer=new PrintWriter(socket.getOutputStream());
+            writer=new PrintWriter(socket.getOutputStream());  //this is outs
 //
               createGUI();
               handleEvents();
@@ -146,7 +146,7 @@ public class Client extends JFrame{
                 try{
                     while (true && !socket.isClosed()){
                     //to read from keyboard
-                    BufferedReader br1=new BufferedReader(new InputStreamReader(System.in));
+                    BufferedReader br1=new BufferedReader(new InputStreamReader(System.in));  //this is inputc
 
                     //toh server ke keyboard se jo bhi enter hoga vo yaha aaega.
                     String messageFromKeyboard=br1.readLine();
