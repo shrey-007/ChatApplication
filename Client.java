@@ -66,11 +66,16 @@ public class Client extends JFrame{
 
         heading.setHorizontalAlignment(SwingConstants.CENTER);
         heading.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-//      heading.setIcon(new ImageIcon("mmvy_status.png"));
-        heading.setHorizontalTextPosition(SwingConstants.CENTER);
+        ImageIcon imageIcon=new ImageIcon("Batman-Logo-1946.png");
+        Image image=imageIcon.getImage();
+        Image scaledImage=image.getScaledInstance(50,30,Image.SCALE_SMOOTH);
+        heading.setIcon(new ImageIcon(scaledImage));
+        heading.setHorizontalTextPosition(SwingConstants.RIGHT);
         heading.setVerticalTextPosition(SwingConstants.CENTER);
 
         messageArea.setEditable(false);
+        messageArea.setBackground(Color.gray);
+        messageArea.setForeground(Color.WHITE);
 
 
         //layout of frame
