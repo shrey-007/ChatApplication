@@ -83,8 +83,8 @@ public class Server extends JFrame {
         heading.setVerticalTextPosition(SwingConstants.CENTER);
 
         messageArea.setEditable(false);
-        messageArea.setBackground(Color.gray);
-        messageArea.setForeground(Color.WHITE);
+        messageArea.setBackground(Color.BLACK);
+        messageArea.setForeground(Color.YELLOW);
 
 
         //layout of frame
